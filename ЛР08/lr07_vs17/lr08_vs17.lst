@@ -1,0 +1,57 @@
+Microsoft (R) Macro Assembler Version 14.15.26730.0	    11/11/18 23:05:04
+function.asm						     Page 1 - 1
+
+
+				.386
+				.MODEL FLAT, C
+					public function
+				.STACK
+ 00000000			.DATA
+					
+ 00000000			.CODE
+ 00000000				function PROC	
+						
+ 00000000  C3					ret
+ 00000001				function ENDP
+					
+
+				END
+Microsoft (R) Macro Assembler Version 14.15.26730.0	    11/11/18 23:05:04
+function.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00000400 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000000 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000001 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+function . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000001 Public C
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000001h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+
+	   0 Warnings
+	   0 Errors

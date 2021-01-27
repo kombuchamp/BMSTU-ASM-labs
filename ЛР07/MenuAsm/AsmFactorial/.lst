@@ -1,0 +1,203 @@
+Microsoft (R) Macro Assembler Version 11.00.61030.0	    11/03/18 17:11:41
+MenuAsm.asm						     Page 1 - 1
+
+
+				.386
+				.MODEL FLAT, C
+					public function
+				.STACK
+ 00000000			.DATA
+ 00000000 00000004			SELECTED DD 4
+ 00000004 00000012 R			OPTIONS DD proc0, proc1, proc2, proc3, proc4, proc5, proc6, proc7, proc8
+	   00000013 R
+	   00000014 R
+	   00000047 R
+	   0000006B R
+	   0000007D R
+	   0000007E R
+	   0000007F R
+	   00000080 R
+ 00000028 000F				X DW 0000Fh
+ 0000002A  00000010 [			ARR DB 16 DUP ('+')
+	    2B
+	   ]
+
+ 00000000			.CODE
+ 00000000				function PROC	
+						; В EBX адрес массива ARR. Во время отладки скопировать адрес и таким образом найти массив в памяти
+ 00000000  BB 0000002A R			mov ebx, offset arr
+
+
+ 00000005  A1 00000000 R			mov eax, SELECTED
+ 0000000A  FF 14 85				CALL OPTIONS[eax*4]
+	   00000004 R
+
+ 00000011  C3					ret
+ 00000012				function ENDP
+					
+
+
+
+					;// Вывод пунктов меню
+ 00000012				proc0 PROC
+ 00000012  C3					ret
+ 00000013				proc0 ENDP
+					
+					;// ввод (не рассматривается)
+ 00000013				proc1 PROC
+ 00000013  C3					ret
+ 00000014				proc1 ENDP
+					
+					;// вывод на экран (в массив символов в памяти)
+					;// с новой строки значения из ячейки Х в форме двоичного целого без знака
+					;// и без лидирующих нулей (использовать команды сдвига).
+ 00000014				proc2 PROC
+ 00000014  66| 8B 1D				mov bx, x ;//  число
+	   00000028 R
+ 0000001B  66| B9 0010				mov cx, 16 ;// Размер массива 
+ 0000001F  66| BE 0000				mov si,0 ;// Индекс в массиве вывода
+						
+ 00000023  EB 02				jmp output
+ 00000025					counter_decrement:
+ 00000025  66| 49					dec cx
+ 00000027					output:
+ 00000027  66| D1 E3					shl bx, 1
+ 0000002A  0F 92 C0					setc al ;// al = CF ? 1 : 0
+							; Проверяем, если в переносе 0
+ 0000002D  3C 00					cmp al, 0
+ 0000002F  74 02					jz check_if_preceding_zero
+ 00000031  EB 06					jmp actual_output
+							; Проверяем, если это лидирующий ноль
+ 00000033						check_if_preceding_zero:
+ 00000033  66| 83 FE 00						cmp si, 0
+ 00000037  74 EC						jz counter_decrement
+ 00000039						actual_output:
+ 00000039  04 30						add al,'0'
+ 0000003B  88 04 35						mov arr[si+1],al ;// со второго символа, в первом знак
+	   0000002B R
+ 00000042  66| 46						inc si
+ 00000044  E2 E1				loop output
+
+
+
+ 00000046  C3					ret
+ 00000047				proc2 ENDP
+
+					;// вывод на экран с новой строки значения из ячейки Х
+					;// в форме двоичного целого со знаком и без лидирующих нулей 
+					;// (использовать команду NEG и процедуру предыдущего пункта).
+ 00000047				proc3 PROC
+						;// Проверяем старший бит числа
+ 00000047  66| 0F BA 25				bt X,15
+	   00000028 R 0F
+ 00000050  0F 92 C0				setc al
+ 00000053  3C 00				cmp al, 0
+ 00000055  74 0E				jz proc3_output
+ 00000057  66| F7 1D				neg x
+	   00000028 R
+ 0000005E  C6 05 0000002A R			mov arr[0], '-'
+	   2D
+ 00000065					proc3_output:
+ 00000065  E8 FFFFFFAA				call proc2
+
+
+ 0000006A  C3					ret
+ 0000006B				proc3 ENDP
+
+					;// вывод на экран с новой строки значения из ячейки Х 
+					;// в форме десятичного целого без знака 
+					;// (использовать команду деления. через остаток от деления).
+ 0000006B				proc4 PROC
+ 0000006B  66| A1				mov ax, x
+	   00000028 R
+ 00000071  66| BA 0000				mov dx, 0
+ 00000075  66| B9 000A				mov cx, 10
+ 00000079  66| F7 F1				div cx
+
+ 0000007C  C3					ret
+ 0000007D				proc4 ENDP
+
+					;// вывод на экран с новой строки значения из ячейки Х 
+					;// в форме десятичного целого со знаком 
+					;// (использовать команду NEG и процедуру предыдущего пункта).
+ 0000007D				proc5 PROC
+ 0000007D  C3					ret
+ 0000007E				proc5 ENDP
+
+					;// вывод на экран с новой строки значения из ячейки Х 
+					;// в форме шестнадцатеричного целого без знака 
+					;// (использовать команды циклического сдвига и конъюнкции).
+ 0000007E				proc6 PROC
+ 0000007E  C3					ret
+ 0000007F				proc6 ENDP
+
+					;// вывод на экран с новой строки значения из ячейки Х 
+					;// в форме шестнадцатеричного целого со знаком 
+					;// (использовать команду NEG и процедуру предыдущего пункта).
+ 0000007F				proc7 PROC
+ 0000007F  C3					ret
+ 00000080				proc7 ENDP
+
+					;// выход
+ 00000080				proc8 PROC
+ 00000080  C3					ret
+ 00000081				proc8 ENDP
+
+				END
+Microsoft (R) Macro Assembler Version 11.00.61030.0	    11/03/18 17:11:41
+MenuAsm.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00000400 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000003A DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000081 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+function . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000012 Public C
+proc0  . . . . . . . . . . . . .	P Near	 00000012 _TEXT	Length= 00000001 Public C
+proc1  . . . . . . . . . . . . .	P Near	 00000013 _TEXT	Length= 00000001 Public C
+proc2  . . . . . . . . . . . . .	P Near	 00000014 _TEXT	Length= 00000033 Public C
+  counter_decrement  . . . . . .	L Near	 00000025 _TEXT	
+  output . . . . . . . . . . . .	L Near	 00000027 _TEXT	
+  check_if_preceding_zero  . . .	L Near	 00000033 _TEXT	
+  actual_output  . . . . . . . .	L Near	 00000039 _TEXT	
+proc3  . . . . . . . . . . . . .	P Near	 00000047 _TEXT	Length= 00000024 Public C
+  proc3_output . . . . . . . . .	L Near	 00000065 _TEXT	
+proc4  . . . . . . . . . . . . .	P Near	 0000006B _TEXT	Length= 00000012 Public C
+proc5  . . . . . . . . . . . . .	P Near	 0000007D _TEXT	Length= 00000001 Public C
+proc6  . . . . . . . . . . . . .	P Near	 0000007E _TEXT	Length= 00000001 Public C
+proc7  . . . . . . . . . . . . .	P Near	 0000007F _TEXT	Length= 00000001 Public C
+proc8  . . . . . . . . . . . . .	P Near	 00000080 _TEXT	Length= 00000001 Public C
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000001h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+ARR  . . . . . . . . . . . . . .	Byte	 0000002A _DATA	
+OPTIONS  . . . . . . . . . . . .	DWord	 00000004 _DATA	
+SELECTED . . . . . . . . . . . .	DWord	 00000000 _DATA	
+X  . . . . . . . . . . . . . . .	Word	 00000028 _DATA	
+
+	   0 Warnings
+	   0 Errors

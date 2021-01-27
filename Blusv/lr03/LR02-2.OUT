@@ -1,0 +1,63 @@
+>BP M1 "R;DB K L1;G"
+>BP M2 "R;DB K L1;G"
+>BP M3 "R;DB K L1;G"
+>BP M4 "R;DB K L1;G"
+>BP M5 "R;DB K L1;G"
+>BP M6 "R;DB K L1;G"
+>G
+AX=3E3C  BX=0000  CX=0000  DX=0000  SP=0300  BP=0000  SI=0000  DI=0000  
+DS=3E3C  ES=3DFC  SS=3E0C  CS=3E3D  IP=0005  NV UP EI PL NZ NA PO NC 
+M1:
+20:	          M1:       MOV   K,2
+3E3D:0005 C606090002     MOV       Byte Ptr [K (0009)],02    ;BR0  DS:0009=00
+3E3C:0000                         -   00                             .
+AX=3E01  BX=0000  CX=0008  DX=0000  SP=0300  BP=0000  SI=0000  DI=0000  
+DS=3E3C  ES=3DFC  SS=3E0C  CS=3E3D  IP=0013  NV UP EI PL NZ NA PO NC 
+M2:
+24:	          M2:       TEST X[SI],AL
+3E3D:0013 84840000       TEST      AL,Byte Ptr [SI+X]        ;BR1  DS:0000=00
+3E3C:0000                         -   02                             .
+AX=3E01  BX=0000  CX=0008  DX=0000  SP=0300  BP=0000  SI=0000  DI=0000  
+DS=3E3C  ES=3DFC  SS=3E0C  CS=3E3D  IP=001F  NV UP EI PL NZ NA PO NC 
+M3:
+28:	          M3:       INC  SI
+3E3D:001F 46             INC       SI                        ;BR2
+3E3C:0000                         -   01                             .
+AX=3E01  BX=0000  CX=0007  DX=0000  SP=0300  BP=0000  SI=0001  DI=0000  
+DS=3E3C  ES=3DFC  SS=3E0C  CS=3E3D  IP=0013  NV UP EI PL NZ NA PO NC 
+M2:
+24:	          M2:       TEST X[SI],AL
+3E3D:0013 84840000       TEST      AL,Byte Ptr [SI+X]        ;BR1  DS:0001=01
+3E3C:0000                         -   01                             .
+AX=3E01  BX=0000  CX=0007  DX=0000  SP=0300  BP=0000  SI=0001  DI=0000  
+DS=3E3C  ES=3DFC  SS=3E0C  CS=3E3D  IP=001F  NV UP EI PL NZ NA PO NC 
+M3:
+28:	          M3:       INC  SI
+3E3D:001F 46             INC       SI                        ;BR2
+3E3C:0000                         -   01                             .
+AX=3E01  BX=0000  CX=0006  DX=0000  SP=0300  BP=0000  SI=0002  DI=0000  
+DS=3E3C  ES=3DFC  SS=3E0C  CS=3E3D  IP=0013  NV UP EI PL NZ NA PO NC 
+M2:
+24:	          M2:       TEST X[SI],AL
+3E3D:0013 84840000       TEST      AL,Byte Ptr [SI+X]        ;BR1  DS:0002=02
+3E3C:0000                         -   01                             .
+AX=3E01  BX=0000  CX=0006  DX=0000  SP=0300  BP=0000  SI=0002  DI=0000  
+DS=3E3C  ES=3DFC  SS=3E0C  CS=3E3D  IP=0022  NV UP EI PL ZR NA PE NC 
+M4:
+30:	          M4:       ADD  SI,'0'
+3E3D:0022 83C630         ADD       SI,+30                    ;BR3
+3E3C:0000                         -   00                             .
+AX=0201  BX=0000  CX=0006  DX=0032  SP=0300  BP=0000  SI=0032  DI=0000  
+DS=3E3C  ES=3DFC  SS=3E0C  CS=3E3D  IP=0029  NV UP EI PL NZ NA PO NC 
+M5:
+33:	          M5:       INT  21H
+3E3D:0029 CD21           INT       21                        ;BR4
+3E3C:0000                         -   00                             .
+AX=0232  BX=0000  CX=0006  DX=0032  SP=0300  BP=0000  SI=0032  DI=0000  
+DS=3E3C  ES=3DFC  SS=3E0C  CS=3E3D  IP=002B  NV UP EI PL NZ NA PO NC 
+M6:
+34:	          M6:       MOV  AH,4CH
+3E3D:002B B44C           MOV       AH,4C                     ;BR5
+3E3C:0000                         -   00                             .
+Program terminated normally (0)
+>q

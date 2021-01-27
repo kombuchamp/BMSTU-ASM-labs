@@ -1,0 +1,8 @@
+t>>LR02-2.OUT
+BP M1 "R;DB K L1;G"
+BP M2 "R;DB K L1;G"
+BP M3 "R;DB K L1;G"
+BP M4 "R;DB K L1;G"
+BP M5 "R;DB K L1;G"
+BP M6 "R;DB K L1;G"
+G

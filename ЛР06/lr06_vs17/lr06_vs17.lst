@@ -1,0 +1,91 @@
+Microsoft (R) Macro Assembler Version 14.15.26730.0	    10/27/18 01:18:40
+factorial.asm						     Page 1 - 1
+
+
+				.386
+				.MODEL FLAT, C
+					public factorial
+				.STACK
+ 00000000			.DATA
+ 00000000			.CODE
+ 00000000				factorial PROC
+ 00000000  55					push ebp		; Сохраняем старый указатель на фрейм стека
+ 00000001  8B EC				mov ebp, esp	; Создаем новый фрейм стека
+
+						; Сохраняем регистры в стек
+ 00000003  56					push esi
+ 00000004  57					push edi
+ 00000005  50					push eax
+						; Забираем аргументы
+ 00000006  8B 75 08				mov esi, [ebp+8]		; Число, от которого требуется взять факториал
+ 00000009  8B 7D 0C				mov edi, [ebp+12]		; Адрес переменной, в которую пойдет результат
+						
+						;__________________________________________________________________________;
+						
+						; Проверка базового случая
+ 0000000C  8B C6				mov eax, esi
+ 0000000E  83 F8 01				cmp eax, 1
+ 00000011  7E 10				jle exit
+
+
+ 00000013  0F AF 07				imul eax, [edi]
+ 00000016  89 07				mov [edi], eax
+						; Рекурсивный вызов
+ 00000018  4E					dec esi
+ 00000019  57					push edi
+ 0000001A  56					push esi
+ 0000001B  E8 FFFFFFE0				call factorial
+
+ 00000020  83 C4 08				add esp, 8		; Очистка стека от аргументов
+
+						;__________________________________________________________________________;
+
+						; Восстанавливаем регистры и возвращаемся
+ 00000023				exit:
+ 00000023  58					pop eax
+ 00000024  5F					pop edi
+ 00000025  5E					pop esi
+ 00000026  5D					pop ebp
+ 00000027  C3					ret
+ 00000028				factorial ENDP
+				END
+Microsoft (R) Macro Assembler Version 14.15.26730.0	    10/27/18 01:18:40
+factorial.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00000400 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000000 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000028 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+factorial  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000028 Public C
+  exit . . . . . . . . . . . . .	L Near	 00000023 _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000001h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+
+	   0 Warnings
+	   0 Errors

@@ -1,0 +1,99 @@
+Microsoft (R) Macro Assembler Version 11.00.61030.0	    10/27/18 14:38:10
+factorial.asm						     Page 1 - 1
+
+
+				.386
+				.MODEL FLAT, C
+					public factorial
+				.STACK
+ 00000000			.DATA
+ 00000000			.CODE
+ 00000000				factorial PROC
+ 00000000  55					push ebp		; Сохраняем старый указатель на фрейм стека
+ 00000001  8B EC				mov ebp, esp	; Создаем новый фрейм стека
+
+						; Сохраняем регистры в стек (eax, edx, ecx и тд можно не сохранять)
+ 00000003  56					push esi
+ 00000004  57					push edi
+						; Забираем аргументы
+ 00000005  8B 75 08				mov esi, [ebp+8]		; Число, от которого требуется взять факториал
+ 00000008  8B 7D 0C				mov edi, [ebp+12]		; Адрес переменной, в которую пойдет результат
+						
+						;__________________________________________________________________________;
+						; Передача аргументов через регистры
+ 0000000B  B8 00000001				mov eax, 1 ; Аккумулятор
+ 00000010  8B CE				mov ecx, esi ; Число, от которого факториал
+						
+ 00000012  E8 00000006				call factorial_helper
+
+ 00000017  89 07				mov [edi], eax
+						
+						;__________________________________________________________________________;
+
+						; Восстанавливаем регистры и возвращаемся
+ 00000019  5F					pop edi
+ 0000001A  5E					pop esi
+ 0000001B  5D					pop ebp
+ 0000001C  C3					ret
+ 0000001D				factorial ENDP
+
+					; Вспомогательная рекурсивная функция.
+					; Аргументы:
+					;_; EAX - Аккумулятор
+					;_; ECX - N
+ 0000001D				factorial_helper PROC NEAR
+						; Базовый случай
+ 0000001D  83 F9 01				cmp ecx, 1
+ 00000020  7E 09				jle exit
+						
+						; Рекурсивный случай
+ 00000022  0F AF C1				imul eax, ecx
+ 00000025  49					dec ECX
+ 00000026  E8 FFFFFFF2				call factorial_helper
+
+ 0000002B				exit:
+ 0000002B  C3					ret
+ 0000002C				factorial_helper ENDP
+
+				END
+Microsoft (R) Macro Assembler Version 11.00.61030.0	    10/27/18 14:38:10
+factorial.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00000400 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000000 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000002C DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+factorial_helper . . . . . . . .	P Near	 0000001D _TEXT	Length= 0000000F Public C
+  exit . . . . . . . . . . . . .	L Near	 0000002B _TEXT	
+factorial  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000001D Public C
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000001h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+
+	   0 Warnings
+	   0 Errors
